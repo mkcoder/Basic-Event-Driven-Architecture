@@ -43,8 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountSystem.cs" />
+    <Compile Include="BookReplay.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="EventStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransactionEvent.cs" />
+    <Compile Include="TransactionEventBook.cs" />
+    <Compile Include="Transction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
