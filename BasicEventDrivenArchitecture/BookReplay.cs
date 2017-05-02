@@ -9,16 +9,15 @@ namespace BasicEventDrivenArchitecture
     public class BookReplay
     {
         private List<TransactionEvent> book;
-        private EventStore store;
 
         public BookReplay(List<TransactionEvent> book)
         {
-            this.book = book;            
-            store = new EventStore();
+            this.book = book;
         }
 
         public EventStore ReplayAll()
         {
+            EventStore store = new EventStore();
             foreach (var transactionEvent in book)
             {
                 store.Transaction(transactionEvent.OldState,
@@ -29,6 +28,7 @@ namespace BasicEventDrivenArchitecture
 
         public EventStore Replay(int upto)
         {
+            EventStore store = new EventStore();
             for (int i = 0; i < upto; i++)
             {
                 var transactionEvent = book[i];
@@ -40,6 +40,7 @@ namespace BasicEventDrivenArchitecture
 
         public EventStore ReplayByUser(string userId)
         {
+            EventStore store = new EventStore();
             foreach (var transactionEvent in book)
             {
                 if ( transactionEvent.NewState.CustomerId==userId)
