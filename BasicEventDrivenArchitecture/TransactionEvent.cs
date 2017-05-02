@@ -2,15 +2,15 @@
 {
     public class TransactionEvent
     {
-        public Customer OldState { get; private set; }
-        public Customer NewState { get; private set; }
-        public Transction Transaction { get; private set; }
+        public Customer OldState { get; }
+        public Customer NewState { get; }
+        public Transction Transaction { get; }
 
         public TransactionEvent(Customer newState, Customer oldState, Transction transaction)
         {
-            this.NewState = newState;
-            this.OldState = oldState;
-            this.Transaction = transaction;
+            NewState = newState;
+            OldState = oldState;
+            Transaction = transaction;
         }
 
         public override string ToString()

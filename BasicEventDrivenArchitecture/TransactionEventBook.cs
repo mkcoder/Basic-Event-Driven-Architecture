@@ -8,13 +8,12 @@ namespace BasicEventDrivenArchitecture
 {
     public class TransactionEventBook
     {
-        private EventStore _eventStore;
-        public List<TransactionEvent> Book { get; set; }= new List<TransactionEvent>();
+        public List<TransactionEvent> Book { get; }
 
         public TransactionEventBook(EventStore eventStore)
         {
-            _eventStore = eventStore;
-            _eventStore.Changed += new LogTransactionEvent(AddTransctionToBook);
+            eventStore.Changed += new LogTransactionEvent(AddTransctionToBook);
+            Book = new List<TransactionEvent>();
         }
 
         private void AddTransctionToBook(TransactionEvent t, EventArgs e)
