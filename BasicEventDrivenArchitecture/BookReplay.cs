@@ -45,7 +45,7 @@ namespace BasicEventDrivenArchitecture
             {
                 if ( transactionEvent.NewState.CustomerId==userId)
                     store.Transaction(transactionEvent.OldState,
-                        transactionEvent.NewState.Amount - transactionEvent.OldState.Amount, transactionEvent.Transaction);
+                        Math.Abs(transactionEvent.NewState.Amount - transactionEvent.OldState.Amount), transactionEvent.Transaction);
             }
             return store;
         }
