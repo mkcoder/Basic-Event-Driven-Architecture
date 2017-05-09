@@ -28,21 +28,9 @@ namespace BasicEventDrivenArchitecture
 
         public Customer Transaction(Customer c, decimal amount, Transction t)
         {
-            Customer action;
-            switch (t)
-            {
-                case Transction.Withdraw:
-                    action = _accountSystem.Withdraw(c, amount);
-                    OnChanged(new TransactionEvent(action, c, t), EventArgs.Empty);
-                    return action;
-                    break;
-                case Transction.Deposit:
-                    action = _accountSystem.Deposit(c, amount);
-                    OnChanged(new TransactionEvent(action, c, t), EventArgs.Empty);
-                    return action;
-                    break;
-            }
-            return c;
+            Customer action = _accountSystem.Transaction(c, amount, t);
+            OnChanged(new TransactionEvent(action, c, t), EventArgs.Empty);            
+            return action;
         }
     }
 }

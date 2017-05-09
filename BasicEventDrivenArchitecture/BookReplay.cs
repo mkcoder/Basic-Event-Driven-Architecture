@@ -9,44 +9,48 @@ namespace BasicEventDrivenArchitecture
     public class BookReplay
     {
         private List<TransactionEvent> book;
+        private readonly EventStore _store = new EventStore();
 
         public BookReplay(List<TransactionEvent> book)
         {
             this.book = book;
         }
 
-        public EventStore ReplayAll()
+        public IEnumerable<Customer> ReplayAll()
         {
-            EventStore store = new EventStore();
-            foreach (var transactionEvent in book)
+            foreach (var groupedCustomerBook in book.GroupBy(_ => _.NewState.CustomerId).Select((k,v) => new { cId = k.Key, events = k.ToList()}))
             {
-                store.Transaction(transactionEvent.OldState,
-                    transactionEvent.NewState.Amount - transactionEvent.OldState.Amount, transactionEvent.Transaction);
+                Customer c = null;
+                foreach (var transactionEvent in groupedCustomerBook.events)
+                {
+                    c = _store.Transaction(transactionEvent.OldState,
+                    Math.Abs(transactionEvent.NewState.Amount - transactionEvent.OldState.Amount), transactionEvent.Transaction);
+                }
+                yield return c;
             }
-            return store;
         }
 
-        public EventStore Replay(int upto)
+        public IEnumerable<Customer> Replay(int upto)
         {
-            EventStore store = new EventStore();
+            Customer c = null;
             for (int i = 0; i < upto; i++)
             {
                 var transactionEvent = book[i];
-                store.Transaction(transactionEvent.OldState,
-                       transactionEvent.NewState.Amount - transactionEvent.OldState.Amount, transactionEvent.Transaction);
+                c = _store.Transaction(transactionEvent.OldState,
+                       Math.Abs(transactionEvent.NewState.Amount - transactionEvent.OldState.Amount), transactionEvent.Transaction);
             }
-            return store;
+            yield return c;
         }
 
-        public EventStore ReplayByUser(string userId)
+        public Customer ReplayByUser(string userId)
         {
-            EventStore store = new EventStore();
+            Customer c = null;
             foreach (var transactionEvent in book.Where(b => b.NewState.CustomerId==userId))
             {
-                store.Transaction(transactionEvent.OldState,
+                c = _store.Transaction(transactionEvent.OldState,
                     Math.Abs(transactionEvent.NewState.Amount - transactionEvent.OldState.Amount), transactionEvent.Transaction);
             }
-            return store;
+            return c;
         }
     }
 }

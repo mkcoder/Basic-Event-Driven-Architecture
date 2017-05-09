@@ -17,5 +17,22 @@
             c.Amount += amount;
             return c;
         }
+
+        public Customer Transaction(Customer customer, decimal amount, Transction transction)
+        {
+            Customer action = null;
+            switch (transction)
+            {
+                case Transction.Withdraw:
+                    action = Withdraw(customer, amount);
+                    return action;
+                    break;
+                case Transction.Deposit:
+                    action = Deposit(customer, amount);
+                    return action;
+                    break;
+            }
+            return action;            
+        }
     }
 }
