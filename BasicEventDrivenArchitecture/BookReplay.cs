@@ -41,11 +41,10 @@ namespace BasicEventDrivenArchitecture
         public EventStore ReplayByUser(string userId)
         {
             EventStore store = new EventStore();
-            foreach (var transactionEvent in book)
+            foreach (var transactionEvent in book.Where(b => b.NewState.CustomerId==userId))
             {
-                if ( transactionEvent.NewState.CustomerId==userId)
-                    store.Transaction(transactionEvent.OldState,
-                        Math.Abs(transactionEvent.NewState.Amount - transactionEvent.OldState.Amount), transactionEvent.Transaction);
+                store.Transaction(transactionEvent.OldState,
+                    Math.Abs(transactionEvent.NewState.Amount - transactionEvent.OldState.Amount), transactionEvent.Transaction);
             }
             return store;
         }
